@@ -1,3 +1,9 @@
+buildscript {
+    ext {
+        queryDslVersion = "5.0.0"
+    }
+}
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.17'
@@ -33,7 +39,11 @@ dependencies {
     runtimeOnly 'com.h2database:h2'
 
     //querydsl 추가
-    implementation 'com.querydsl:querydsl-jpa'
+    //implementation 'com.querydsl:querydsl-jpa'
+    //annotationProcessor 'com.querydsl:querydsl-apt'
+
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+    implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 
 }
 
@@ -56,6 +66,9 @@ sourceSets {
     main.java.srcDir querydslDir
 }
 configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
     querydsl.extendsFrom compileClasspath
 }
 compileQuerydsl {
