@@ -1,5 +1,6 @@
 package study.querydsl.entity;
 
+import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -74,7 +75,7 @@ public class QueryDSLBasicTest {
     }
 
     /**
-     * QueryDSL은 JPQL의 빌더 역할 | 따라서 QueryDSL은 결국 JPQL이 됨
+     * QueryDSL은 JPQL의 빌더 역할 / 따라서 QueryDSL은 결국 JPQL이 됨
      * QMember variable처럼 직접 선언하는 경우는 같은 테이블에서 JOIN할 때
      */
     @Test
@@ -107,5 +108,34 @@ public class QueryDSLBasicTest {
                 )
                 .fetchOne();
         assertThat(findMember.getUsername()).isEqualTo("member1");
+    }
+
+    @Test
+    public void result() {
+
+        // 처음 한 건 조회
+        Member findMember1 = queryFactory
+                .selectFrom(member)
+                .fetchFirst();
+
+        // 페이징에서 사용
+        QueryResults<Member> results = queryFactory
+                .selectFrom(member)
+                .fetchResults();
+
+        // Count 쿼리 변경
+        long resultCnt = queryFactory
+                .selectFrom(member)
+                .fetchCount();
+
+        // List 조회
+        List<Member> fetch = queryFactory
+                .selectFrom(member)
+                .fetch();
+
+        // 단 건 조회
+        Member findMember2 = queryFactory
+                .selectFrom(member)
+                .fetchOne();
     }
 }
